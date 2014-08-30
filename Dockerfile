@@ -8,8 +8,7 @@ RUN \
   apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/{apt,dpkg,cache,log}/ && \
   echo "daemon off;" >> /etc/nginx/nginx.conf && \
 #fix for long server names
-  sed -i 's/.*server_names_hash_bucket_size .*/      server_names_hash_bucket_size 256;/g' /etc/nginx/nginx.conf && \
-  sed -i 's/http[ ]+{/&\n      client_max_body_size 80M;/g' /etc/nginx/nginx.conf && \
+  sed -i 's/.*server_names_hash_bucket_size .*/      server_names_hash_bucket_size 256;\n      client_max_body_size 80M;/g' /etc/nginx/nginx.conf && \
   mkdir /app && \
   curl -o /usr/local/bin/forego -L https://godist.herokuapp.com/projects/ddollar/forego/releases/current/linux-amd64/forego && \
   chmod u+x /usr/local/bin/forego && \
