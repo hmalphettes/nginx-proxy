@@ -4,7 +4,7 @@ MAINTAINER Jason Wilder jwilder@litl.com
 # Install Nginx.
 RUN \
   echo "deb http://debian.gtisc.gatech.edu/debian wheezy-backports main" >> /etc/apt/sources.list.d/squeeze-backports.list && \
-  apt-get update && apt-get -y -t wheezy-backports install nginx curl && \
+  apt-get update && apt-get -y -t wheezy-backports install nginx curl less && \
   apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/{apt,dpkg,cache,log}/ && \
   echo "daemon off;" >> /etc/nginx/nginx.conf && \
 #fix for long server names
