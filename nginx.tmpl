@@ -17,8 +17,12 @@ upstream {{ $host }} {
 {{ range $index, $value := $containers }}
 
 	{{ $addrLen := len $value.Addresses }}
+  {{ /* If no port exposed then assume --net=host */ }}
+  {{ if eq $addrLen 0 }}
+		   # {{$value.Name}}
+		   server {{ 127.0.0.1 }}:{{ $value.Env.VIRTUAL_PORT }};
 	{{/* If only 1 port exposed, use that */}}
-	{{ if eq $addrLen 1 }}
+	{{ else if eq $addrLen 1 }}
 		{{ with $address := index $value.Addresses 0 }}
 		   # {{$value.Name}}
 		   server {{ $address.IP }}:{{ $address.Port }};
