@@ -9,7 +9,7 @@ RUN apt-get update \
     ca-certificates \
     wget \
  && apt-get clean \
- && rm -r /var/lib/apt/lists/* && \
+ && rm -r /var/lib/apt/lists/* \
 # Configure Nginx and apply fix for very long server names
  && echo "daemon off;" >> /etc/nginx/nginx.conf \
  && sed -i 's/.*server_names_hash_bucket_size .*/      server_names_hash_bucket_size 256;\n      client_max_body_size 80M;/g' /etc/nginx/nginx.conf \
