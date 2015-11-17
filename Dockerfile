@@ -1,27 +1,24 @@
-FROM nginx:1.9.6
+FROM alpine
 MAINTAINER Jason Wilder mail@jasonwilder.com
 
 # Install wget and install/updates certificates
-RUN apt-get update \
- && apt-get install -y -q --no-install-recommends \
-    ca-certificates \
-    wget \
- && apt-get clean \
- && rm -r /var/lib/apt/lists/*
+RUN apk add --update nginx ca-certificates bash \
+ && rm -rf /var/cache/apk/*
 
 # Configure Nginx and apply fix for very long server names
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
- && sed -i 's/^http {/&\n    server_names_hash_bucket_size 128;/g' /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+#RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
+# && sed -i 's/^http {/&\n    server_names_hash_bucket_size 128;/g' /etc/nginx/nginx.conf
 
-# Install Forego
-RUN wget -P /usr/local/bin https://godist.herokuapp.com/projects/ddollar/forego/releases/current/linux-amd64/forego \
+# Install Forego - static musl build from https://github.com/ddollar/forego/issues/65#issuecomment-150591344
+RUN wget -P /usr/local/bin https://github.com/hmalphettes/nginx-proxy/releases/download/0.0.0/forego \
  && chmod u+x /usr/local/bin/forego
 
 ENV DOCKER_GEN_VERSION 0.4.2
 
-RUN wget https://github.com/jwilder/docker-gen/releases/download/$DOCKER_GEN_VERSION/docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
- && tar -C /usr/local/bin -xvzf docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
- && rm /docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz
+# Same binary build for docker-gen: https://github.com/hmalphettes/nginx-proxy/releases/tag/0.0.0
+RUN wget -P /usr/local/bin https://github.com/hmalphettes/nginx-proxy/releases/download/0.0.0/docker-gen \
+ && chmod u+x /usr/local/bin/docker-gen
 
 COPY . /app/
 WORKDIR /app/
