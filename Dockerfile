@@ -1,7 +1,7 @@
-FROM nginx:1.9.6
+FROM nginx:1.11.3
 MAINTAINER Jason Wilder mail@jasonwilder.com
 
-ENV DOCKER_GEN_VERSION 0.4.2
+ENV DOCKER_GEN_VERSION 0.7.3
 
 # Install wget and install/updates certificates
 RUN apt-get update \
@@ -14,7 +14,7 @@ RUN apt-get update \
  && echo "daemon off;" >> /etc/nginx/nginx.conf \
  && sed -i 's/.*server_names_hash_bucket_size .*/      server_names_hash_bucket_size 256;\n      client_max_body_size 80M;/g' /etc/nginx/nginx.conf \
 # Install Forego
- && wget -P /usr/local/bin https://godist.herokuapp.com/projects/ddollar/forego/releases/current/linux-amd64/forego \
+ && wget -P /usr/local/bin https://github.com/jwilder/forego/releases/download/v0.16.1/forego \
  && chmod u+x /usr/local/bin/forego \
  && wget https://github.com/jwilder/docker-gen/releases/download/$DOCKER_GEN_VERSION/docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
  && tar -C /usr/local/bin -xvzf docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
