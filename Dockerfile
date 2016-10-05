@@ -23,7 +23,7 @@ RUN apt-get update \
 COPY . /app/
 WORKDIR /app/
 
-ENV DOCKER_HOST unix:///tmp/docker.sock
+ENV DOCKER_HOST unix:///var/run/docker.sock
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["forego", "start", "-r"]
